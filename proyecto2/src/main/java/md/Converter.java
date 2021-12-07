@@ -1,17 +1,21 @@
 package main.java.md;
 public class Converter{
 
-    public String binaryToText(StringBuilder text){
-        String str = text.toString();
-        int charCode = Integer.parseInt(info, 2);
-        return "";
+    /**  Este método recibe una cadena de caracteres en binario y
+     * lo cambia letras
+     */
+    public String binaryToText(String message){
+        StringBuilder uncoverMessage = new StringBuilder();
+        String[] binaryLetters = message.split(" ");
+        for (String s : binaryLetters) {
+            int charCode = Integer.parseInt(s, 2);
+            uncoverMessage.append((char)charCode);
+        }
+        return uncoverMessage.toString();
     }
 
-    public int[] imageToBinary(){
-        return null;
-    }
-
-    public StringBuilder textToBinary(String text){ 
+     /** Este método recibe un texto y lo pasa a binario */
+     public String textToBinary(String text){ 
         byte[] bytes = text.getBytes();
         StringBuilder binary = new StringBuilder();
         for (byte b : bytes) {
@@ -26,6 +30,13 @@ public class Converter{
             }
             binary.append(" ");
         }
-        return binary;
+        return binary.toString();
     }
+
+
+    public int[] imageToBinary(){
+        return null;
+    }
+
+   
 }
