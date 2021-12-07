@@ -1,4 +1,16 @@
 package main.java.md;
+
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.image.PixelGrabber;
+import java.nio.channels.WritePendingException;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.MemoryImageSource;
 public class Converter{
 
     /**  Este método recibe una cadena de caracteres en binario y
@@ -34,9 +46,28 @@ public class Converter{
     }
 
 
-    public int[] imageToBinary(){
+    public int[] imageToBinary(BufferedImage image){
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int[] pixels = new int[width * height];
+
+        // Retrieve pixel info and store in 'pixels' variable
+        PixelGrabber pgb = new PixelGrabber(image, 0, 0, width, height, pixels, 0, width);
+        try{
+            pgb.grabPixels();
+            return pixels;
+        }catch(Exception e){
+            System.out.print(e);
+        }
         return null;
     }
 
-   
+    public void textToImage(String path, int width, int height, int[] data) throws IOException{
+        MemoryImageSource mis = new MemoryImageSource(width,height,data,0,width);
+        Image im = Toolkit.getDefaultToolkit().createImage(mis);
+
+        BufferedImage buffImage = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
+        buffImage.getGraphics().drawImage(im,0,0,null);
+        ImageIO.write(buffImage, "png", new File(path));
+    }
 }

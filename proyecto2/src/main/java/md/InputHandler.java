@@ -6,20 +6,19 @@ import java.util.Scanner;
 import javax.imageio.ImageIO;
 
 public class InputHandler{
-    public void getImage(){
+    public BufferedImage getImage(){
         try {
-            BufferedImage img = ImageIO.read(new File("resources/img/planes.png"));
-            int height = img.getHeight();
-            System.out.print("LO encontre"+height);
+            BufferedImage img = ImageIO.read(new File("resources/img/diez.png"));
+            return img;
         } catch (Exception e) {
             System.out.print(e);
         }
+        return null;
     }
 
     public String getTextFile(){
         try {
             File text = new File("resources/text/test.txt");
-            Scanner scnr = new Scanner(text);
             System.out.print("Lo encontre");
         } catch (Exception e) {
             System.out.print(e);
