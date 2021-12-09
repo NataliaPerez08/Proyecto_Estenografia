@@ -3,12 +3,10 @@ package main.java.md;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.PixelGrabber;
-import java.nio.channels.WritePendingException;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
 import java.awt.image.BufferedImage;
 import java.awt.image.MemoryImageSource;
 public class Converter{
@@ -27,8 +25,12 @@ public class Converter{
     }
 
      /** Este método recibe un texto y lo pasa a binario */
-     public String textToBinary(String text){ 
+    public String textToBinary(String text){ 
         byte[] bytes = text.getBytes();
+        return byteToBinary(bytes);
+    }
+
+    public String byteToBinary(byte[] bytes){
         StringBuilder binary = new StringBuilder();
         for (byte b : bytes) {
             int val = b;
@@ -44,7 +46,6 @@ public class Converter{
         }
         return binary.toString();
     }
-
 
     public int[] imageToBinary(BufferedImage image){
         int width = image.getWidth();
@@ -62,7 +63,7 @@ public class Converter{
         return null;
     }
 
-    public void textToImage(String path, int width, int height, int[] data) throws IOException{
+    public void byteToImage(String path, int width, int height, int[] data) throws IOException{
         MemoryImageSource mis = new MemoryImageSource(width,height,data,0,width);
         Image im = Toolkit.getDefaultToolkit().createImage(mis);
 
