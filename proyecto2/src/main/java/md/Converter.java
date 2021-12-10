@@ -63,12 +63,15 @@ public class Converter{
         return null;
     }
 
-    public void byteToImage(String path, int width, int height, int[] data) throws IOException{
-        MemoryImageSource mis = new MemoryImageSource(width,height,data,0,width);
-        Image im = Toolkit.getDefaultToolkit().createImage(mis);
+    public boolean byteToImage(String path, int width, int height, int[] data) throws IOException{
+        try{
+            MemoryImageSource mis = new MemoryImageSource(width,height,data,0,width);
+            Image im = Toolkit.getDefaultToolkit().createImage(mis);
 
-        BufferedImage buffImage = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
-        buffImage.getGraphics().drawImage(im,0,0,null);
-        ImageIO.write(buffImage, "png", new File(path));
+            BufferedImage buffImage = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
+            buffImage.getGraphics().drawImage(im,0,0,null);
+            ImageIO.write(buffImage, "png", new File(path));
+        }catch(Exception e){System.out.print(e);}
+        return false;    
     }
 }

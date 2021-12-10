@@ -7,6 +7,8 @@ public class Steganography{
         int j=0;
         for (int i : image) {
             String biString = Integer.toBinaryString(i);
+            Long tmp = Long.parseLong(biString, 2);
+            newImg[j++] = tmp.intValue();
         }
         return newImg;
     }
