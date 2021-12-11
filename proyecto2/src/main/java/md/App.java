@@ -15,13 +15,19 @@ public class App {
         IOHandler nHandler = new IOHandler();
         Converter converter = new Converter();
         Steganography steganography = new Steganography();
-        try{
-            BufferedImage img = nHandler.getImage();
-            if(img != null){
-                int[] pixels = converter.imageToBinary(img);
+        BufferedImage img = nHandler.getImage();
+        int[] pixels = converter.imageToBinary(img);
 
-                String message = converter.textToBinary("No idea");
-                int[] prueba = steganography.hideMessage(pixels, message);
+        String message = converter.textToBinary("NO");
+        int[] prueba = steganography.hideMessage(pixels, message);
+
+        String binMsg = steganography.getMessage(prueba);
+
+        //System.out.println(message+"\n"+binMsg+"\n");
+        //System.out.println(message+": mess"+converter.binaryToText(message));
+
+        try{
+            if(img != null){
                 try{
                     nHandler.giveImage(img.getWidth(), img.getHeight(), prueba);
                 }catch(Exception e){System.out.print(e);  }
