@@ -38,6 +38,20 @@ public class IOHandler{
         return msg;
     }
 
+    public String processString(String text){
+        StringBuilder sb = new StringBuilder();
+        text = text.trim();
+        text = text.toUpperCase();
+        int len = text.length();
+        for(int i=0; i < len;i++){
+            char c = text.charAt(i);
+            if(c >= 65 && c <= 90){//Entre 65 y 90
+                sb.append(c);
+            }  
+        }
+        return sb.toString();
+    }
+
     public boolean giveTextFile(String message, String path){ // Mensaje recuperado
         try{
         File file = new File(path);

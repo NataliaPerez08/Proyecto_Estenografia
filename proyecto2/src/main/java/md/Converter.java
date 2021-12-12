@@ -30,7 +30,7 @@ public class Converter{
         return byteToBinary(bytes);
     }
 
-    public String byteToBinary(byte[] bytes){
+    private String byteToBinary(byte[] bytes){
         StringBuilder binary = new StringBuilder();
         for (byte b : bytes) {
             int val = b;

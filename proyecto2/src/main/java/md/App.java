@@ -18,27 +18,26 @@ public class App {
     private static String PATH_TEXT_INPUT = "resources/text/msg.txt";
     private static String PATH_TEXT_OUTPUT = "output/text/newmsg.txt";
     private static String PATH_IMAGE_OUTPUT="output/img/newImage.png";
-    private static String PATH_IMAGE_INPUT ="resources/img/planes.png";
+    private static String PATH_IMAGE_INPUT ="resources/img/cuadro.png";
 
     public static void main( String[] args ){ 
 
         BufferedImage img = nHandler.getImage(PATH_IMAGE_INPUT);
-        int[] pixels = converter.imageToBinary(img);
 
         String message = converter.textToBinary("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam a blandit diam. ");
-        int[] prueba = steganography.hideMessage(pixels, message);
+        int[] prueba = steganography.hideMessage(img, message);
 
         //String binMsg = steganography.getMessage(prueba);
 
         //System.out.println(message+"\n"+binMsg+"\n"+converter.binaryToText(binMsg));
         //System.out.println(message+": mess"+converter.binaryToText(message));
 
-        try{
+        /*try{
             if(img != null){
                 try{
                     nHandler.giveImage(img.getWidth(), img.getHeight(), prueba, PATH_IMAGE_OUTPUT);
                 }catch(Exception e){System.out.print(e);  }
             }
-        }catch(Exception e){System.out.print(e);}
+        }catch(Exception e){System.out.print(e);}*/
     }
 }
