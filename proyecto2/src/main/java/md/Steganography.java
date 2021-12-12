@@ -1,21 +1,19 @@
 package main.java.md;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class Steganography{
 
     public int[] hideMessage(int[] image, String message){
-        int[] newImg = new int[image.length]; 
-        String noSpaceMsg = message.replaceAll("\\s", "");
-        int j=0;
-        int k=0;
-        for (int i : image) {
-            Long tmp;
-            String biString = Integer.toBinaryString(i);
-            int len = biString.length();
-            if(k < noSpaceMsg.length()){
-                String modifedString = noSpaceMsg.charAt(k++)+biString.substring(0, len-1);//+noSpaceMsg.charAt(k++);
-                tmp = Long.parseLong(modifedString, 2);
-            }
-            tmp = Long.parseLong(biString, 2);
-            newImg[j++] = tmp.intValue();
+        int[] newImg = Arrays.copyOf(image,image.length);
+        String[] charArrayBinaryString = message.split(" ");
+        int i=0;
+        for (String sC : charArrayBinaryString) {
+            String biString = Integer.toBinaryString(image[i]);
+            Long tmp = Long.parseLong(biString, 2);
+            newImg[i] = tmp.intValue();
+            i++;
         }
         return newImg;
     }

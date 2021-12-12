@@ -13,15 +13,9 @@ import main.java.md.Converter;
 
 
 public class IOHandler{
-    private static String PATH_TEXT_INPUT = "resources/text/test.txt";
-    private static String PATH_TEXT_OUTPUT = "output/text/test.txt";
-    private static String PATH_IMAGE_OUTPUT="output/img/newImage.png";
-    private static String PATH_IMAGE_INPUT ="resources/img/cuadro.png";
-
-
-    public BufferedImage getImage(){
+    public BufferedImage getImage(String path){
         try {
-            BufferedImage img = ImageIO.read(new File(PATH_IMAGE_INPUT));
+            BufferedImage img = ImageIO.read(new File(path));
             return img;
         } catch (Exception e) {
             System.out.print(e);
@@ -29,10 +23,10 @@ public class IOHandler{
         return null;
     }
 
-    public String getTextFile(){
+    public String getTextFile(String path){
         String msg = "";
         try {
-            File text = new File(PATH_TEXT_INPUT);
+            File text = new File(path);
             Scanner sc = new Scanner(text);
             while (sc.hasNextLine()){
                 msg += sc.nextLine();
@@ -44,17 +38,16 @@ public class IOHandler{
         return msg;
     }
 
-    public boolean giveTextFile(String message){ // Mensaje recuperado
+    public boolean giveTextFile(String message, String path){ // Mensaje recuperado
         try{
-        File file = new File(PATH_TEXT_OUTPUT);
+        File file = new File(path);
             // Si el archivo no existe es creado
             if (!file.exists()) {
                 file.createNewFile();
             }
-            FileWriter fw = new FileWriter(file);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(message);
-            bw.close();
+            FileWriter fw = new FileWriter(file, false);
+            fw.write(message);
+            fw.close();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,8 +55,8 @@ public class IOHandler{
         return false;
     }
 
-    public boolean giveImage(int width, int height, int[] data) throws IOException{
+    public boolean giveImage(int width, int height, int[] data, String path) throws IOException{
         Converter cv = new Converter(); 
-        return cv.byteToImage(PATH_IMAGE_OUTPUT, width, height, data);
+        return cv.byteToImage(path, width, height, data);
     }
 }
