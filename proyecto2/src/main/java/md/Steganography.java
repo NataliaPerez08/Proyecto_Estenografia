@@ -7,13 +7,14 @@ public class Steganography{
 
     public int[] hideMessage(int[] image, String message){
         int[] newImg = Arrays.copyOf(image,image.length);
-        String[] charArrayBinaryString = message.split(" ");
+        String[] charArrayBinaryString = message.split(" "); // caracter en binario
         int i=0;
-        for (String sC : charArrayBinaryString) {
-            String biString = Integer.toBinaryString(image[i]);
-            Long tmp = Long.parseLong(biString, 2);
-            newImg[i] = tmp.intValue();
-            i++;
+        if(message.length() < image.length){
+            for (String sC : charArrayBinaryString) {
+                byte tmp = Byte.parseByte(sC, 2);
+                newImg[i] = image[i] & tmp;
+                i++;
+            }
         }
         return newImg;
     }
