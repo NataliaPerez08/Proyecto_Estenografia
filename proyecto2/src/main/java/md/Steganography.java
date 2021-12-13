@@ -19,7 +19,6 @@ public class Steganography{
             char c = message.charAt(k);
             if(++cont==4) cont=0;
             int edit = handlesinglepixel(pixels[k],c,cont);
-            //System.out.println(edit);
             newImg[k] = edit;
         }
         return newImg;
@@ -58,22 +57,23 @@ public class Steganography{
     if(Integer.valueOf(bin) == 0){
         auxBin = bin+c;
     }else{
-        auxBin = bin.substring(0,7)+c;
+        auxBin = bin.substring(0,bin.length()-2)+c;
     }
     return auxBin;
 }
    
    public String getMessage(int[] image) {
-       String aux="";
+        String aux="";
         StringBuilder msg = new StringBuilder();
-        int c=0;
-        for (int i : image) {
-            aux += handlesinglepixel(i);
-            if(++c==1){
-                System.out.print("++"+c+"++");
-                int tmp = Integer.valueOf(aux);
-                msg.append(validChar((char) tmp));
-                c=0;
+
+        int len = image.length;
+        for (int i = 0; i < len/2; i++) {
+            aux += handleTwopixel(i,i+1);
+            if(aux.length() == 8){
+                int tmp = Integer.valueOf(aux,2);
+                String slp = validChar((char) tmp);
+                msg.append(slp);
+                aux = "";
             }
         }
         return msg.toString();
@@ -84,6 +84,10 @@ public class Steganography{
             return c+"";
         }
         return "";
+    }
+
+    public String handleTwopixel(int pixel,int pixel2) {
+        return handlesinglepixel(pixel)+handlesinglepixel(pixel2);
     }
 
     public String handlesinglepixel(int pixel) {

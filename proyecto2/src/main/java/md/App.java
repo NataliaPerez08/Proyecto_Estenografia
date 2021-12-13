@@ -18,7 +18,7 @@ public class App {
     private static String PATH_TEXT_INPUT = "resources/text/msg.txt";
     private static String PATH_TEXT_OUTPUT = "output/text/newmsg.txt";
     private static String PATH_IMAGE_OUTPUT="output/img/newImage.png";
-    private static String PATH_IMAGE_INPUT ="resources/img/cuadro.png";
+    private static String PATH_IMAGE_INPUT ="resources/img/diez.png";
 
     public static void main( String[] args ){ 
 
@@ -31,12 +31,28 @@ public class App {
         //System.out.println(message+"\n"+binMsg+"\n"+converter.binaryToText(binMsg));
         //System.out.println(message+": mess"+converter.binaryToText(message));
 
-        /*try{
+        System.out.print(binMsg);
+
+        int[] pixels = converter.imageToBinary(img);
+
+
+        for (int i : prueba) {
+            System.out.print(i+" ");
+        }
+
+        System.out.print("\n\n\n");
+
+
+        for (int i : pixels) {
+            System.out.print(i+" ");
+        }
+
+        try{
             if(img != null){
                 try{
                     nHandler.giveImage(img.getWidth(), img.getHeight(), prueba, PATH_IMAGE_OUTPUT);
                 }catch(Exception e){System.out.print(e);  }
             }
-        }catch(Exception e){System.out.print(e);}*/
+        }catch(Exception e){System.out.print(e);}
     }
 }
