@@ -24,11 +24,10 @@ public class App {
 
         BufferedImage img = nHandler.getImage(PATH_IMAGE_INPUT);
 
-        String message = converter.textToBinary("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam a blandit diam. ");
+        String message = converter.textToBinary("mensaje");
         int[] prueba = steganography.hideMessage(img, message);
 
-        //String binMsg = steganography.getMessage(prueba);
-
+        String binMsg = steganography.getMessage(prueba);
         //System.out.println(message+"\n"+binMsg+"\n"+converter.binaryToText(binMsg));
         //System.out.println(message+": mess"+converter.binaryToText(message));
 

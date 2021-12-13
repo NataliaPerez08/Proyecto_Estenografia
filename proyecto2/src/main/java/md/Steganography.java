@@ -9,25 +9,23 @@ import main.java.md.Converter;
 public class Steganography{
     Converter cv = new Converter();
 
-    public int[] hideMessage(BufferedImage img, String message){
-        String[] charArrayBinaryString = message.split(" "); // caracter en binario
-        
-        
+    public int[] hideMessage(BufferedImage img, String message){        
         int[] pixels = cv.imageToBinary(img);
         int[] newImg = Arrays.copyOf(pixels,pixels.length);
-        int w = img.getWidth();
-        int h = img.getHeight();
-
-        for(int j=0; j < h; j++){
-            for(int i=0; i < w; i++){
-                handlesinglepixel(i, j, pixels[j*w+i]);
-            }
+        message = message.replaceAll(" ", "");
+        int cont=0;
+        int len = message.length();
+        for(int k=0; k < len; k++){
+            char c = message.charAt(k);
+            if(++cont==4) cont=0;
+            int edit = handlesinglepixel(pixels[k],c,cont);
+            //System.out.println(edit);
+            newImg[k] = edit;
         }
-
         return newImg;
     }
     
-    public void handlesinglepixel(int x, int y, int pixel) {
+    public int handlesinglepixel(int pixel,char c, int cont) {
         int alpha = (pixel >> 24) & 0xff;
         int red   = (pixel >> 16) & 0xff;
         int green = (pixel >>  8) & 0xff;
@@ -36,26 +34,78 @@ public class Steganography{
         String redString = Integer.toBinaryString(red);
         String greenString = Integer.toBinaryString(green);
         String blueString = Integer.toBinaryString(blue);
-        System.out.println(pixel+" alpha:"+alpha+" red:"+red+" green:"+green+" blue:"+blue);
-        System.out.println(".... alpha: "+alphaString+"....");
-        System.out.println("....red: "+redString+"....");
-        System.out.println("....green: "+greenString+"....");
-        System.out.println("....blue: "+blueString+"....");
-        // Deal with the pixel as necessary...
 
+        String newNumber="";
+        switch (cont) {
+            case 0:
+                newNumber+=appendBin(alphaString, c);
+            break;
+            case 1:
+                newNumber+=appendBin(redString, c);
+            break;
+            case 2:
+                newNumber+=appendBin(greenString, c);
+            break;
+            case 3:
+                newNumber+=appendBin(blueString, c);
+            break; 
+        }
+        return Integer.parseInt(newNumber,2);
    }
-    public String getMessage(int[] image) {
-        String msgBin="";
+
+   public String appendBin(String bin, char c){
+       String auxBin="";
+    if(Integer.valueOf(bin) == 0){
+        auxBin = bin+c;
+    }else{
+        auxBin = bin.substring(0,7)+c;
+    }
+    return auxBin;
+}
+   
+   public String getMessage(int[] image) {
+       String aux="";
+        StringBuilder msg = new StringBuilder();
         int c=0;
         for (int i : image) {
-            String biString = Integer.toBinaryString(i);
-            int len = biString.length()-1;
-            msgBin += biString.charAt(len);
-            if(c++ == 8){
-                msgBin+=" ";
+            aux += handlesinglepixel(i);
+            if(++c==1){
+                System.out.print("++"+c+"++");
+                int tmp = Integer.valueOf(aux);
+                msg.append(validChar((char) tmp));
                 c=0;
             }
         }
-        return msgBin;
+        return msg.toString();
     }
+
+    public String validChar(char c){
+        if (c >= 65 && c <= 90){
+            return c+"";
+        }
+        return "";
+    }
+
+    public String handlesinglepixel(int pixel) {
+        int alpha = (pixel >> 24) & 0xff;
+        int red   = (pixel >> 16) & 0xff;
+        int green = (pixel >>  8) & 0xff;
+        int blue  = (pixel      ) & 0xff;
+        String alphaString = Integer.toBinaryString(alpha);
+        String redString = Integer.toBinaryString(red);
+        String greenString = Integer.toBinaryString(green);
+        String blueString = Integer.toBinaryString(blue);
+
+        String a = appendBin(alphaString);
+        String r = appendBin(redString);
+        String g = appendBin(greenString);
+        String b = appendBin(blueString);
+        return a+r+g+b;
+    }
+
+    public String appendBin(String bin){
+        String auxBin="";
+        auxBin = bin.charAt(bin.length()-1)+"";
+        return auxBin;
+ }
 }
