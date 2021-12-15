@@ -8,8 +8,9 @@ import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 
 /**
- * Hello world!
- *
+ * Aplicación que oculta mensaje en imagen.
+ * Autor: Natalia Abigail Pérez Romero
+ * Versión: 1.0.1
  */
 public class App {
     static IOHandler nHandler = new IOHandler();
