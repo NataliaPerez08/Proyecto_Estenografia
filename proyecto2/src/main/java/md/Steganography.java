@@ -13,24 +13,22 @@ public class Steganography{
         int[] pixels = cv.imageToBinary(img);
         int[] newImg = Arrays.copyOf(pixels,pixels.length);
         String[] charBinStrings = message.split(" ");
-        int len = charBinStrings.length;
+        int len = charBinStrings.length/2;
         for(int k=0; k < len; k++){
             String tmp = charBinStrings[k];
             int lenChar = tmp.length();
             String firstHalf = tmp.substring(0, lenChar/2);
             String secondHalf = tmp.substring(lenChar/2,lenChar);
-            
             int edit = handlesinglepixel(pixels[k], firstHalf);
             int edit2 = handlesinglepixel(pixels[k+1], secondHalf);
             newImg[k] = edit;
+            newImg[k+1] = edit2;
         }
         return newImg;
     }
     
     public int handlesinglepixel(int pixel, String half) {
         String newNumber =chageLSB(pixel, half);
-        //newNumber+=chageLSB(pixel2,secondHalf);
-        //System.out.println(newNumber+"  "+Integer.parseInt(newNumber, 2)+"   ");
         return Integer.parseInt(newNumber,2);
    }
 
@@ -43,7 +41,6 @@ public class Steganography{
         String redString = Integer.toBinaryString(red);
         String greenString = Integer.toBinaryString(green);
         String blueString = Integer.toBinaryString(blue);
-
         if(binString.length() == 4){
             alphaString = appendBin(alphaString, binString.charAt(0));
             redString = appendBin(redString, binString.charAt(1));
