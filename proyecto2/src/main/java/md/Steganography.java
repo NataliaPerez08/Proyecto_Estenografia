@@ -12,19 +12,29 @@ public class Steganography{
     public int[] hideMessage(BufferedImage img, String message){        
         int[] pixels = cv.imageToBinary(img);
         int[] newImg = Arrays.copyOf(pixels,pixels.length);
-        message = message.replaceAll(" ", "");
-        int cont=0;
-        int len = message.length();
+        String[] charBinStrings = message.split(" ");
+        int len = charBinStrings.length;
         for(int k=0; k < len; k++){
-            char c = message.charAt(k);
-            if(++cont==4) cont=0;
-            int edit = handlesinglepixel(pixels[k],c,cont);
+            String tmp = charBinStrings[k];
+            int lenChar = tmp.length();
+            String firstHalf = tmp.substring(0, lenChar/2);
+            String secondHalf = tmp.substring(lenChar/2,lenChar);
+            
+            int edit = handlesinglepixel(pixels[k], firstHalf);
+            int edit2 = handlesinglepixel(pixels[k+1], secondHalf);
             newImg[k] = edit;
         }
         return newImg;
     }
     
-    public int handlesinglepixel(int pixel,char c, int cont) {
+    public int handlesinglepixel(int pixel, String half) {
+        String newNumber =chageLSB(pixel, half);
+        //newNumber+=chageLSB(pixel2,secondHalf);
+        //System.out.println(newNumber+"  "+Integer.parseInt(newNumber, 2)+"   ");
+        return Integer.parseInt(newNumber,2);
+   }
+
+   public String chageLSB(int pixel,String binString){
         int alpha = (pixel >> 24) & 0xff;
         int red   = (pixel >> 16) & 0xff;
         int green = (pixel >>  8) & 0xff;
@@ -34,33 +44,20 @@ public class Steganography{
         String greenString = Integer.toBinaryString(green);
         String blueString = Integer.toBinaryString(blue);
 
-        String newNumber="";
-        switch (cont) {
-            case 0:
-                newNumber+=appendBin(alphaString, c);
-            break;
-            case 1:
-                newNumber+=appendBin(redString, c);
-            break;
-            case 2:
-                newNumber+=appendBin(greenString, c);
-            break;
-            case 3:
-                newNumber+=appendBin(blueString, c);
-            break; 
+        if(binString.length() == 4){
+            alphaString = appendBin(alphaString, binString.charAt(0));
+            redString = appendBin(redString, binString.charAt(1));
+            greenString = appendBin(greenString, binString.charAt(2));
+            blueString = appendBin(blueString, binString.charAt(3));
         }
-        return Integer.parseInt(newNumber,2);
+        return alphaString+redString+greenString+blueString;
    }
 
    public String appendBin(String bin, char c){
-       String auxBin="";
-    if(Integer.valueOf(bin) == 0){
-        auxBin = bin+c;
-    }else{
-        auxBin = bin.substring(0,bin.length()-2)+c;
+        String auxBin="";
+        auxBin = bin.substring(0,bin.length()-1)+c;
+        return auxBin;
     }
-    return auxBin;
-}
    
    public String getMessage(int[] image) {
         String aux="";
@@ -111,5 +108,5 @@ public class Steganography{
         String auxBin="";
         auxBin = bin.charAt(bin.length()-1)+"";
         return auxBin;
- }
+    }
 }

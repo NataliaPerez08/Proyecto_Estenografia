@@ -31,7 +31,7 @@ public class App {
         //System.out.println(message+"\n"+binMsg+"\n"+converter.binaryToText(binMsg));
         //System.out.println(message+": mess"+converter.binaryToText(message));
 
-        System.out.print(binMsg);
+        System.out.println("Mensaje: "+binMsg);
 
         int[] pixels = converter.imageToBinary(img);
 
@@ -39,7 +39,7 @@ public class App {
         for (int i : prueba) {
             System.out.print(i+" ");
         }
-
+        
         System.out.print("\n\n\n");
 
 
