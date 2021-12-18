@@ -5,7 +5,6 @@ import main.java.md.IOHandler;
 import main.java.md.Steganography;
 
 import java.awt.image.BufferedImage;
-import java.nio.file.Path;
 import java.util.Scanner;
 
 /**
@@ -41,7 +40,8 @@ public class App {
                 try{
                     String msg = ioHandler.getTextFile(PATH_TEXT_INPUT+fileToHide);
                     BufferedImage img = ioHandler.getImage(PATH_IMAGE_INPUT+imgToHide);
-                    String binMsg = converter.textToBinary(msg);
+                    String pmsg = ioHandler.processString(msg);
+                    String binMsg = converter.textToBinary(pmsg);
                     int[] newImg = steganography.hideMessage(img, binMsg);
                     int h = img.getHeight();
                     int w = img.getWidth();

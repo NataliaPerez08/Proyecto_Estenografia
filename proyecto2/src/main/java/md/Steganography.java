@@ -1,6 +1,4 @@
 package main.java.md;
-
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.awt.image.BufferedImage;
 
