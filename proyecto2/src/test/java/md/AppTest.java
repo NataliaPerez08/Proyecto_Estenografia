@@ -10,7 +10,7 @@ import main.java.md.Converter;
 import main.java.md.IOHandler;
 
 /**
- * Unit test for simple App.
+ * Pruebas unitarias
  */
 public class AppTest 
 {

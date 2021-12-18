@@ -6,11 +6,27 @@ import java.awt.image.BufferedImage;
 
 import main.java.md.Converter;
 
+/** Esta clase se encarga de ocultar el mensaje en imagen 
+ * y recuperar el mensaje de la imagen */
 public class Steganography{
-    Converter cv = new Converter();
+    /** Permite a hacer conversiones desde esta clase */
+    private Converter cv = new Converter();
 
-    public int[] hideMessage(BufferedImage img, String message){        
+    /**
+     * Este método se encarga de ocultar el mensaje en la imagen.
+     * Un caracter se oculta en dos pixeles
+     * @param img (En la cual se quiere ocultar el mensaje)
+     * @param message  (El mensaje que se quiere ocultar en binario)
+     * @return int[] Arreglo de pixeles de la nueva imagen que tiene el mensaje oculto
+     */
+    public int[] hideMessage(BufferedImage img, String message){
         int[] pixels = cv.imageToBinary(img);
+        //Valida que se tenga sufienciente espacio
+        if(message.length() > pixels.length/2){
+            System.out.print("Not enough space");
+            return pixels;
+        }
+
         int[] newImg = Arrays.copyOf(pixels,pixels.length);
         String[] charBinStrings = message.split(" ");
         int len = charBinStrings.length/2;
@@ -26,13 +42,26 @@ public class Steganography{
         }
         return newImg;
     }
-    
-    public int handlesinglepixel(int pixel, String half) {
+    /**
+     * Método auxiliar que toma un pixel y la mitad de la cadena en binario
+     * de un caracter y lo envia a otro método auxiliar que cambia el bit menos 
+     * significativo.
+     * @param pixel
+     * @param half
+     * @return int (El nuevo valor del pixel)
+     */
+    private int handlesinglepixel(int pixel, String half) {
         String newNumber =chageLSB(pixel, half);
         return Integer.parseInt(newNumber,2);
    }
-
-   public String chageLSB(int pixel,String binString){
+   /**
+    * Método auxiliar que toma un pixel y la mitad de la cadena en binario
+     * de un caracter y cambia el bit menos significativo de los canales del pixel
+    * @param pixel
+    * @param binString
+    * @return String (valor del pixel en cadena en binario)
+    */
+   private String chageLSB(int pixel,String binString){
         int alpha = (pixel >> 24) & 0xff;
         int red   = (pixel >> 16) & 0xff;
         int green = (pixel >>  8) & 0xff;
@@ -49,13 +78,22 @@ public class Steganography{
         }
         return alphaString+redString+greenString+blueString;
    }
-
-   public String appendBin(String bin, char c){
+   /**
+    * Método auxiliar que toma un canal en binario y cambia el LSB
+    * @param pixel
+    * @param binString
+    * @return String (valor del canal en cadena en binario)
+    */
+   private String appendBin(String bin, char c){
         String auxBin="";
         auxBin = bin.substring(0,bin.length()-1)+c;
         return auxBin;
     }
-   
+   /**
+    * Método que recupera el mensaje de la imagen
+    * @param image (arreglo de pixeles de la imagen)
+    * @return String (El mensaje)
+    */
    public String getMessage(int[] image) {
         String aux="";
         StringBuilder msg = new StringBuilder();
@@ -63,7 +101,7 @@ public class Steganography{
         int len = image.length;
         for (int i = 0; i < len/2; i++) {
             aux += handleTwopixel(i,i+1);
-            if(aux.length() == 8){
+            if(aux.length() == 8){ // la cadena aux de LSBs puede tener un caracter  
                 int tmp = Integer.valueOf(aux,2);
                 String slp = validChar((char) tmp);
                 msg.append(slp);
@@ -73,18 +111,34 @@ public class Steganography{
         return msg.toString();
     }
 
-    public String validChar(char c){
+    /**
+     * Método auxiliar que concatena LSB de dos pixeles
+     * @param pixel
+     * @param pixel2
+     * @return String (LSB de dos pixeles)
+     */
+    private String handleTwopixel(int pixel,int pixel2) {
+        return handlesinglepixel(pixel)+handlesinglepixel(pixel2);
+    }
+
+    /**
+     * Método auxiliar que verifica que el caracter recibido sea valido
+     * @param c
+     * @return String (Caracter entre 65 y 90 , es decir, [A-Z])
+     */
+    private String validChar(char c){
         if (c >= 65 && c <= 90){
             return c+"";
         }
         return "";
     }
-
-    public String handleTwopixel(int pixel,int pixel2) {
-        return handlesinglepixel(pixel)+handlesinglepixel(pixel2);
-    }
-
-    public String handlesinglepixel(int pixel) {
+    
+    /**
+     * Método auxiliar que recupera LSB de los canales del pixel
+     * @param pixel
+     * @return String (LSB del pixel)
+     */
+    private String handlesinglepixel(int pixel) {
         int alpha = (pixel >> 24) & 0xff;
         int red   = (pixel >> 16) & 0xff;
         int green = (pixel >>  8) & 0xff;
@@ -94,14 +148,18 @@ public class Steganography{
         String greenString = Integer.toBinaryString(green);
         String blueString = Integer.toBinaryString(blue);
 
-        String a = appendBin(alphaString);
-        String r = appendBin(redString);
-        String g = appendBin(greenString);
-        String b = appendBin(blueString);
+        String a = recoverBin(alphaString);
+        String r = recoverBin(redString);
+        String g = recoverBin(greenString);
+        String b = recoverBin(blueString);
         return a+r+g+b;
     }
-
-    public String appendBin(String bin){
+    /**
+     * Método auxiliar que regresa el ultimo bit dada una cadena binaria
+     * @param bin
+     * @return String (último bit de cadena binaria)
+     */
+    private String recoverBin(String bin){
         String auxBin="";
         auxBin = bin.charAt(bin.length()-1)+"";
         return auxBin;
