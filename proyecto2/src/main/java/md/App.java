@@ -9,8 +9,9 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 /**
- * Clase principal
- *
+ * Aplicación que oculta mensaje en imagen.
+ * Autor: Natalia Abigail Pérez Romero
+ * Versión: 1.0.1
  */
 public class App {
     static IOHandler ioHandler = new IOHandler();
@@ -75,5 +76,6 @@ public class App {
             }
             System.out.println("Type h to hide or u to uncover  ");
         }
+        sc.close();
     }
 }
